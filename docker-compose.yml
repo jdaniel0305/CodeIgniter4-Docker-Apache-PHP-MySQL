@@ -4,7 +4,8 @@ services:
         build:
             context: .
             dockerfile: docker/mysql/Dockerfile
-        environment: 
+        environment:
+            DATABASE_FILE: ${DATABASE_FILE}
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
         command: --default-authentication-plugin=mysql_native_password
@@ -12,7 +13,7 @@ services:
         volumes:
             - ./db_data:/usr/data
         ports:
-            - 3306:3306
+            - "3306:3306"
     web:
         build:
             context: .
@@ -20,23 +21,36 @@ services:
             args:
                 uid: ${UID}
         environment:
+            - PROJECT_FILE=#${PROJECT_FILE}
             - APACHE_RUN_USER=#${UID}
             - APACHE_RUN_GROUP=#${UID}
+            - LETS_ENCRYPT_EMAIL="howard@emprendedoresnicas.net"
+            - LETS_ENCRYPT_DOMAINS="#${ADMIN_DOMAIN},#${API_DOMAIN}"
         restart: unless-stopped
         volumes: 
             - ./src:/var/www/html
             - ./apache_log:/var/log/apache2
         ports:
-            - 80:80
+            - "80:80"
+            - "443:443"
+        volumes_from:
+            - letsencryptstore
+        labels:
+            io.enonic.backup.data: "/etc/letsencrypt,/var/lib/letsencrypt"
         depends_on: 
             - db
         links:
             - db
+    letsencryptstore:
+        image: busybox
+        volumes:
+            - "/etc/letsencrypt"
+            - "/var/lib/letsencrypt"
     adminer:
         image: adminer
         restart: unless-stopped
         ports:
-            - 8080:8080
+            - "8080:8080"
 volumes:
     db_data:
     src:

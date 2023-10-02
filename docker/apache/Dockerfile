@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.2-apache
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 RUN apt-get update
 RUN apt-get install -y \
@@ -40,7 +40,8 @@ RUN mv composer.phar /usr/local/bin/composer
 RUN chmod +x /usr/local/bin/composer
 RUN composer self-update
 
-COPY src/ /var/www/html/
+COPY ${PROJECT_FILE} /var/www/html/admin
+COPY ${API_FILE} /var/www/html/api
 # 6. we need a user with the same UID/GID with host user
 # so when we execute CLI commands, all the host file's ownership remains intact
 # otherwise command from inside container will create root-owned files and directories
@@ -50,3 +51,4 @@ RUN mkdir -p /home/devuser/.composer && \
     chown -R devuser:devuser /home/devuser
 
 EXPOSE 80
+EXPOSE 443
