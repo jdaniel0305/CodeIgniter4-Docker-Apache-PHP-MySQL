@@ -24,7 +24,7 @@ services:
             - PROJECT_FILE=#${PROJECT_FILE}
             - APACHE_RUN_USER=#${UID}
             - APACHE_RUN_GROUP=#${UID}
-            - LETS_ENCRYPT_EMAIL="howard@emprendedoresnicas.net"
+            - LETS_ENCRYPT_EMAIL=#${LETS_ENCRYPT_EMAIL}"
             - LETS_ENCRYPT_DOMAINS=#${ADMIN_DOMAIN},#${API_DOMAIN}
         restart: unless-stopped
         volumes: 
