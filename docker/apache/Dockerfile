@@ -40,8 +40,8 @@ RUN mv composer.phar /usr/local/bin/composer
 RUN chmod +x /usr/local/bin/composer
 RUN composer self-update
 
-COPY ${PROJECT_FILE} /var/www/html/admin
-COPY ${API_FILE} /var/www/html/api
+COPY appoiments_admin/ /var/www/html/admin
+COPY appoiments_api/ /var/www/html/api
 # 6. we need a user with the same UID/GID with host user
 # so when we execute CLI commands, all the host file's ownership remains intact
 # otherwise command from inside container will create root-owned files and directories
