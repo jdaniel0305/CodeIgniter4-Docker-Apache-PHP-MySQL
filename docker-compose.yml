@@ -28,8 +28,8 @@ services:
             - LETS_ENCRYPT_DOMAINS="#${ADMIN_DOMAIN},#${API_DOMAIN}"
         restart: unless-stopped
         volumes: 
-            - ./src:/var/www/html/admin
-            - ./src:/var/www/html/api
+            - ./appoiments_admin:/var/www/html/admin
+            - ./appoiments_api:/var/www/html/api
             - ./apache_log:/var/log/apache2
         ports:
             - "80:80"
